@@ -24,17 +24,24 @@ public class CanardController : MonoBehaviour
     [SerializeField] private bool allowManualInput = false; // Disable when PID is active
     private Transform[] canards;
     private float[] canardAngles;   // exposed to RocketSim for force calculation
+    private bool passiveMode;
+    private Quaternion[] neutralRotations;
 
-    void Start()
+    void Awake()
     {
         canards = new Transform[4];
         canardAngles = new float[4];
+        neutralRotations = new Quaternion[4];
         for (int i = 0; i < 4; i++)
+        {
             canards[i] = canardsParent.GetChild(i);
+            neutralRotations[i] = canards[i].localRotation;
+        }
     }
 
     void Update()
     {
+        if (passiveMode) return;
         if (allowManualInput)
             ManageInput();
 
@@ -77,6 +84,7 @@ public class CanardController : MonoBehaviour
 
     public void SetDeflections(float pitch, float yaw)
     {
+        if (passiveMode) return;
         pitchDeflection = Mathf.Clamp(pitch, -maxDeflectionAngle, maxDeflectionAngle);
         yawDeflection = Mathf.Clamp(yaw, -maxDeflectionAngle, maxDeflectionAngle);
     }
@@ -86,6 +94,19 @@ public class CanardController : MonoBehaviour
     {
         pitchDeflection = 0f;
         yawDeflection = 0f;
+    }
+
+    public void SetPassiveMode()
+    {
+        passiveMode = true;
+        allowManualInput = false;
+        ResetCanards();
+        if (canardAngles == null) return;
+        for (int i = 0; i < canardAngles.Length; i++)
+        {
+            canardAngles[i] = 0f;
+            canards[i].localRotation = neutralRotations[i];
+        }
     }
 
     public float[] GetCanardAngles() => canardAngles;
@@ -99,7 +120,7 @@ public class CanardController : MonoBehaviour
     {
         GUI.Label(new Rect(10, 10, 200, 20), $"Pitch deflection: {pitchDeflection:F2}°");
         GUI.Label(new Rect(10, 30, 200, 20), $"Yaw deflection:   {yawDeflection:F2}°");
-        string inputMode = allowManualInput ? "Manual (arrow keys)" : "PID";
+        string inputMode = passiveMode ? "Passive (neutral)" : allowManualInput ? "Manual (arrow keys)" : "External";
         GUI.Label(new Rect(10, 50, 300, 20), $"Control mode: {inputMode}");
     }
 }

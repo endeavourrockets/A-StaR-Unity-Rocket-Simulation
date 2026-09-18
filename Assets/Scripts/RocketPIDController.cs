@@ -110,7 +110,7 @@ public class RocketPIDController : MonoBehaviour
         if (!showDebugGUI) return;
 
         int y = 80; // offset below CanardController's HUD rows
-        GUI.Label(new Rect(10, y, 300, 20), "── PID Controller ──────────────────");
+        GUI.Label(new Rect(10, y, 300, 20), "--- PID Controller --------");
         GUI.Label(new Rect(10, y + 20, 300, 20), $"Pitch error: {dbgPitchError:+000.0;-000.0}°   cmd: {dbgPitchCmd:+00.0;-00.0}°");
         GUI.Label(new Rect(10, y + 40, 300, 20), $"Yaw error:   {dbgYawError:+000.0;-000.0}°   cmd: {dbgYawCmd:+00.0;-00.0}°");
         GUI.Label(new Rect(10, y + 60, 300, 20), $"Integrals:   P={pitchIntegral:F2}  Y={yawIntegral:F2}");

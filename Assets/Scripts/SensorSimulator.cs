@@ -256,7 +256,7 @@ public class SensorSimulator : MonoBehaviour
         if (!showDebugGUI) return;
 
         int y = 200; // offset below CanardController/RocketPIDController HUD rows
-        GUI.Label(new Rect(10, y, 320, 20), "── Sensor Simulator ────────────────");
+        GUI.Label(new Rect(10, y, 320, 20), "--- Sensor Simulator --------");
         GUI.Label(new Rect(10, y + 20, 320, 20), $"Phase: {currentPhase}   t={simTimeSeconds:F2}s");
         GUI.Label(new Rect(10, y + 40, 320, 20), $"Accel (body): {latestRawAccel.x:F2}, {latestRawAccel.y:F2}, {latestRawAccel.z:F2} m/s^2");
         GUI.Label(new Rect(10, y + 60, 320, 20), $"Gyro (body):  {latestRawGyro.x:F3}, {latestRawGyro.y:F3}, {latestRawGyro.z:F3} rad/s");

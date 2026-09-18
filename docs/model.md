@@ -22,7 +22,7 @@ Check any saved values before running any tests.
 
 RocketSim uses a Unity Rigidbody. Gravity is applied explicitly, so the simulated rocket must not also use built-in Rigidbody gravity. Aerodynamics use basic exponential air density, fixed aerodynamic coefficients (soon to be interpolated), and an approximate angle-dependent force applied at a fixed CP.
 
-The thrust profile is imported directly as a CSV of impulse over time. Propellant consumption is calculated from thrust, specific impulse, gravity, and the fixed timestep. CG is interpolated with remaining fuel.
+The thrust profile contains force in newtons versus time in seconds. The solver integrates piecewise-linear samples over each fixed timestep. Propellant consumption follows the fraction of total impulse delivered, and CG follows full/empty mass moments. Principal moments about CG are explicitly applied but currently held constant.
 
 Canard forces use a simplified model. There are no dynamic coefficients, actuator dynamics, or simulated airflow. The forces applied rely on the assumptions of small deviations, negligible mass, and fixed CP.
 

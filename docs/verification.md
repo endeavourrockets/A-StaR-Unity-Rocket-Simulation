@@ -1,44 +1,26 @@
 # Verification
 
-Guideline for future tests. Hasn't been used yet.
+Planned checks and recorded comparison results. Follow these steps before submitting a PR and add the latest results.
 
 ## Clean-clone run
 
-- [ ] Clone into a new directory and open the project root in Unity 6000.3.4f1.
-- [ ] Allow dependencies/imports to complete. Record any compilation errors.
-- [ ] Enter Play mode and make sure the scene doesn't throw exceptions.
-- [ ] Exit Play mode and confirm both JSONL files aren't empty but readable. Check no NaN values are registered.
-- [ ] Check flightlogs and cache don't get added to Git. If they do, check gitignore.
-- [ ] Reopen the project and repeat using only the README.
-
-## Physics checks to implement
-
-| Check | What it isolates |
-| --- | --- |
-| Ballistic flight with drag/thrust disabled | Gravity and integration; detect double gravity |
-| Constant force on constant mass | Force scaling and units |
-| Torque about a principal axis | Inertia, axes, and angular response |
-| Zero wind and reversed wind cases | Relative-airflow conventions |
-| Zero, positive, and negative canard commands | Force/moment signs and symmetry |
-| Halved timestep with fixed configuration | Numerical convergence |
-| Different rendering rates | Unwanted render/physics timing dependence |
-| Rest and free-fall accelerometer cases | Specific-force definition |
-| Known sampled input and delay | Actual sensor rate and latency |
-| Same seed and configuration repeated | Reproducibility within the tested environment |
-
-Choose tolerances and expected behaviour before running a check. Fix isolated failures before tuning a controller against the whole flight.
+- Clone into a new directory and open the project root in Unity.
+- Allow dependencies/imports to complete. Record any compilation errors.
+- Enter Play mode and make sure the scene doesn't throw exceptions.
+- Exit Play mode and confirm both JSONL files aren't empty but readable. Check no NaN values are registered.
+- Check flightlogs and cache don't get added to Git. If they do, check gitignore.
 
 ## Reference comparison
 
-Use OpenRocket's static flight of A-StaR's rocket for reference. Check all parameters match, including: motor, atmosphere, recovery, etc. If a different flight/rocket was used for comparison, label it somewhere.
+Use OpenRocket's static flight of A-StaR's rocket for reference (`Assets\CFD Data\OR_Unity_comparison_data.csv`). Check all parameters match, including: motor, atmosphere, recovery, etc. If a different flight/rocket was used for comparison, label it somewhere.
 
-## Run record template
+## PR Experiment template
 
 Template PR experiment (for future use):
 
 - Date and person:
 - Git commit and any uncommitted changes:
-- Unity version, operating system:
+- Unity version, OS:
 - Scene and configuration changes:
 - Physics timestep, sensor/controller settings, random seed:
 - Question, expected result, and preselected tolerance:
@@ -47,20 +29,22 @@ Template PR experiment (for future use):
 - Pass/fail/not run:
 - Limitations and next action:
 
-## Latest status (10-09-2026)
+## Latest status (21-09-2026)
 
-Static flight looks sensible. The last recorded no-wind apogee is approximately **1320 m**, compared with approximately **1000 m** in OpenRocket. However, this varies a lot depending on the specific aerodynamic coefficients used and assumptions about canard drag.
+Compared `FlightLogs/baseline_20260921_151312_270.csv` with `Assets/CFD Data/OR_Unity_comparison_data.csv`. Comparison calculations are handled by `tool/compare_flights.py`.
 
-Future experiment:
-1. Preserve the current scene/configuration and record the exact revision and any uncommitted changes.
-2. Export simulation outputs from OpenRocket, including: sensor readings, altitude, motor burn, timesteps, etc.
-3. Match altitude, launch conditions, mass/CG/inertia, motor impulse, burn time, and atmosphere in Unity.
-4. Disable auto control (PID) for a static reference case.
-5. Compare powered ascent through burnout, then coast to apogee. Inspect mass, thrust, speed, altitude, and aerodynamic forces with respect to OpenRocket data.
-6. Investigate any disagreements.
+Launch settings used: Cesaroni 266H125 motor, sea-level launch, no wind, parachute disabled.
 
-### Further context
+| Measurement | Result |
+| --- | ---: |
+| Unity apogee above initial position | 1067.0863 m |
+| OpenRocket apogee above initial position | 1013.4970 m |
+| Apogee difference | +53.5893 m (~5.29%) |
+| Altitude MSE | 1141.9488 m^2 |
+| Altitude RMSE | 33.7927 m |
+| Maximum absolute altitude error in comparison window | 53.1572 m |
+| Apogee time difference | +0.2900 s |
+| Comparison window | 0–12.44 s |
+| Samples / resampling interval | 623 / 0.02 s |
 
-- The same manufacturer motor data were used for both simulations; you can drag and drop a CSV file directly with the Unity inspector, so there is a CSV/eng file with the current data.
-- Most other rocket parameters were directly matched to OpenRocket (mass, length, burn rate, diameter, CP/CG positions etc.).
-- Launches are currently assumed at sea-level. Exponential density is used for pressure.
+No tolerances have been set yet for pass/fail criteria Thrust, mass, velocity, and drag stuill need to be compared, which is not handled by the current script.

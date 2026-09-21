@@ -4,9 +4,9 @@ using UnityEngine.VFX;
 
 public static class CSVLoader
 {
-    public static List<State> LoadStates(string csvText)
+    public static List<PlaybackFrame> LoadStates(string csvText)
     {
-        var states = new List<State>();
+        var states = new List<PlaybackFrame>();
         var lines = csvText.Split('\n');
 
         foreach (var line in lines)
@@ -37,7 +37,7 @@ public static class CSVLoader
             Quaternion rot = new Quaternion(qx, qy, qz, qw) * Quaternion.Euler(90, 0, 0); // Prefab rocket points horizontally. Adjusting to point upwards.
             float[] c_angles = new float[] {a1, a2, a3, a4};
 
-            states.Add(new State(t, pos, rot, c_angles));
+            states.Add(new PlaybackFrame(t, pos, rot, c_angles));
         }
 
         return states;

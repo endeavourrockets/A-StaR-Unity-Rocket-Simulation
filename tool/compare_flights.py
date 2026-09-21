@@ -1,7 +1,7 @@
 """Compare the baseline CSV with a numeric OpenRocket CSV export (all SI units).
 
 Example:
-python Assets/Editor/compare_flights.py FlightLogs/baseline.csv reference.csv \
+python tool/compare_flights.py FlightLogs/baseline.csv reference.csv \
     --or-time-col 0 --or-altitude-col 1
 
 Default window: common ascent, ending at the earlier apogee. Initial positions

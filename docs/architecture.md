@@ -15,11 +15,11 @@ All code is found under `Assets/Scripts`
 | GaussianRandom.cs / DelayLine.cs | Noise generation and sample buffering |
 | FlightRecorder.cs | Writes truth and sensor frames to JSONL |
 | RocketStateFrame.cs / SensorFrame.cs | JSON-serialisable output |
-| RocketPlayback.cs / CSVLoader.cs / State.cs | Old render-only code for a CSV file of rocket states |
-| ParachuteDynamics.cs / FlightLogConverter.cs | Placeholders |
-| CameraScripts/ | Camera viewing behaviours |
+| RocketPlayback.cs / CSVLoader.cs / PlaybackFrame.cs | Old render-only code for a CSV file of rocket states |
+| ParachuteDynamics.cs | Placeholders |
+| CameraScripts | Camera viewing behaviours |
 
-## Current execution
+## Execution
 
 1. Start methods initialise the scene/rocket parameters.
 2. RocketSim updates mass, applies gravity, thrust, and aerodynamic forces.
@@ -79,11 +79,9 @@ flowchart LR
     CF --> RT
 ```
 
-## Future structure
+## Future structure (not implemented)
 
-Physical calculations, sensor states, actuator states, and control logic should be kept independent to rendering.
-
-The flat Scripts directory is fine at this size, but a better layout could be used if more scripts are introduced:
+Physical calculations, sensor states, actuator states, and control logic should ideally be kept independent to rendering. The flat Scripts directory is fine at this size, but a better layout could be used if more scripts are introduced:
 
 ```text
 Assets/
@@ -91,8 +89,8 @@ Assets/
     Simulation/     RocketSim, ParachuteDynamics
     Control/        RocketPIDController, CanardController
     Sensors/        SensorSimulator, SensorFrame, DelayLine, GaussianRandom
-    Recording/      FlightRecorder, RocketStateFrame, FlightLogConverter
-    Playback/       RocketPlayback, CSVLoader, State
+    Recording/      FlightRecorder, RocketStateFrame
+    Playback/       RocketPlayback, CSVLoader, PlaybackFrame
     Cameras/        existing CameraScripts contents
     Configuration/ ThrustCurveAssets
     Debugging/      Test
@@ -102,6 +100,4 @@ Assets/
 
 ## OpenRocket 
 
-The structure was designed to be entirely OpenRocket compatible, allowing one to export a design/3D model directly from OR to Unity. Importing geometry does not by itself import individual parameters like mass, fuel, aerodynamic coefficients, or any dimensions.
-
-More comparisons against OpenRocket should be carried out in the future to test the validity of the code.
+The structure was designed to be entirely OpenRocket compatible, allowing one to export a design/3D model directly to Unity. Importing geometry does not by itself import individual parameters like mass, fuel, aerodynamic coefficients, or any dimensions.

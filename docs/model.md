@@ -1,6 +1,6 @@
 # Model assumptions, structure, and limitations
 
-The current model is quite simple and canard actuation relies on a highly simplified aerodynamic model.
+The current model is somewhat basic. Canard actuation relies on a highly simplified aerodynamic model.
 
 ![Rocket](../Images/TheRocket.png)
 
@@ -20,15 +20,19 @@ Check any saved values before running any tests.
 
 ## Active model
 
-RocketSim uses a Unity Rigidbody. Gravity is applied explicitly, so the simulated rocket must not also use built-in Rigidbody gravity. Aerodynamics use basic exponential air density, fixed aerodynamic coefficients (soon to be interpolated), and an approximate angle-dependent force applied at a fixed CP.
+RocketSim uses a Unity Rigidbody. Gravity is applied explicitly, so the simulated rocket must not also use built-in Rigidbody gravity. Aerodynamics use basic exponential air density, fixed aerodynamic coefficients (soon to be interpolated), and an approximate angle-dependent force applied at a fixed CoP.
 
-The thrust profile is imported directly as a CSV of impulse over time. Propellant consumption is calculated from thrust, specific impulse, gravity, and the fixed timestep. CG is interpolated with remaining fuel.
+The thrust profile contains force in newtons versus time in seconds. The solver integrates piecewise-linear samples over each fixed timestep. Propellant consumption follows the fraction of total impulse delivered, and CoG follows full/empty mass moments.
 
-Canard forces use a simplified model. There are no dynamic coefficients, actuator dynamics, or simulated airflow. The forces applied rely on the assumptions of small deviations, negligible mass, and fixed CP.
+Canard forces use a simplified model. There are no dynamic coefficients, actuator dynamics, or simulated airflow. The forces applied rely on the assumptions of small deviations, negligible mass, and fixed CoP.
 
-These findings are a starting backlog, not a completed physics audit.
+### Further context
 
-## Output interpretation
+- The same manufacturer motor data were used for both simulations; you can drag and drop a CSV file directly with the Unity inspector, so there is a CSV/eng file with the current data.
+- Most other rocket parameters were directly matched to OpenRocket (mass, length, burn rate, diameter, CoP/CoG positions etc.).
+- Launches are currently assumed at sea-level. Exponential density is used for pressure.
+
+## JSON output
 
 FlightLogs contains paired truth and sensor JSONL files. This directly matches A-StaR's flight computer flight log data.
 

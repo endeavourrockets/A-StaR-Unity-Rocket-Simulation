@@ -1,6 +1,6 @@
 // Ground-truth flight state for one timestep, exported as JSON Lines alongside
 // SensorFrame (shared `timestamp` clock so the two logs can be joined in Python).
-// Kept separate from State.cs, which is used by the existing CSV playback feature
+// Kept separate from PlaybackFrame.cs, which is used by the existing CSV playback feature
 // (CSVLoader/RocketPlayback) and has a different, fixed field layout.
 [System.Serializable]
 public class RocketStateFrame

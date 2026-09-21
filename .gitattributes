@@ -7,7 +7,7 @@
 *.meta text
 *.unity text
 *.prefab text
-*.asset text
+*.asset text=auto
 *.mat text
 *.controller text
 *.anim text
@@ -25,3 +25,5 @@
 *.wav binary
 *.mp3 binary
 *.mp4 binary
+# TerrainData is binary even when Unity uses Force Text serialization.
+*Terrain*.asset binary
